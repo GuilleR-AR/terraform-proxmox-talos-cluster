@@ -1,7 +1,7 @@
 resource "proxmox_virtual_environment_vm" "talos_cp" {
   count       = var.count_cp
   name        = "${var.name}-cp-${count.index}"
-  description = "Managed by Terraform"
+  description = var.desc
   tags        = ["${var.tags},controlplane"]
   node_name   = var.target_node
   on_boot     = true
@@ -9,7 +9,7 @@ resource "proxmox_virtual_environment_vm" "talos_cp" {
 
   cpu {
     cores = var.cores
-    type  = "x86-64-v2-AES"
+    type  = var.cpu_type
   }
 
   memory {
@@ -18,6 +18,7 @@ resource "proxmox_virtual_environment_vm" "talos_cp" {
 
   agent {
     enabled = var.agent
+    timeout = var.timeout
   }
 
   network_device {
@@ -28,8 +29,8 @@ resource "proxmox_virtual_environment_vm" "talos_cp" {
     datastore_id = var.ci_disk_storage
     file_id      = proxmox_virtual_environment_download_file.talos_nocloud_image.id
     file_format  = "raw"
-    interface    = "virtio0"
-    size         = 20
+    interface    = var.disk_interface
+    size         = var.disk_size
   }
 
   operating_system {
@@ -40,16 +41,11 @@ resource "proxmox_virtual_environment_vm" "talos_cp" {
     datastore_id = var.vm_disk_storage
     ip_config {
       ipv4 {
-        address = "${var.subnet_cidr}.${var.starting_ip + count.index}/24"
-        gateway = var.default_gateway
-      }
-      ipv6 {
-        address = "dhcp"
+        address = "${cidrhost(var.subnet_cidr, var.starting_ip + count.index)}/${element(split("/", var.subnet_cidr), 1)}"
+        gateway = element(split("/", var.subnet_cidr), 0)
       }
     }
-    user_data_file_id = proxmox_virtual_environment_file.user_data_cloud_config.id
   }
-  depends_on = [proxmox_virtual_environment_file.user_data_cloud_config]
 }
 
 resource "proxmox_virtual_environment_vm" "talos_worker" {
@@ -72,6 +68,7 @@ resource "proxmox_virtual_environment_vm" "talos_worker" {
 
   agent {
     enabled = var.agent
+    timeout = var.timeout
   }
 
   network_device {
@@ -82,7 +79,7 @@ resource "proxmox_virtual_environment_vm" "talos_worker" {
     datastore_id = var.ci_disk_storage
     file_id      = proxmox_virtual_environment_download_file.talos_nocloud_image.id
     file_format  = "raw"
-    interface    = "virtio0"
+    interface    = var.disk_interface
     size         = var.disk_size
   }
 
@@ -91,17 +88,13 @@ resource "proxmox_virtual_environment_vm" "talos_worker" {
   }
 
   initialization {
-    datastore_id = "local-lvm"
+    datastore_id = var.vm_disk_storage
     ip_config {
       ipv4 {
-        address = "${var.subnet_cidr}.${var.starting_ip + count.index + 1}/24"
-        gateway = var.default_gateway
-      }
-      ipv6 {
-        address = "dhcp"
+        address = "${cidrhost(var.subnet_cidr, var.starting_ip + var.count_cp + count.index)}/${element(split("/", var.subnet_cidr), 1)}"
+        gateway = element(split("/", var.subnet_cidr), 0)
       }
     }
-    user_data_file_id = proxmox_virtual_environment_file.user_data_cloud_config.id
   }
-  depends_on = [proxmox_virtual_environment_vm.talos_cp, proxmox_virtual_environment_file.user_data_cloud_config]
+  depends_on = [proxmox_virtual_environment_vm.talos_cp]
 }

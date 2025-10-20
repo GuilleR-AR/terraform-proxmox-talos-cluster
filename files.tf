@@ -1,10 +1,10 @@
 resource "proxmox_virtual_environment_download_file" "talos_nocloud_image" {
   content_type = "iso"
-  datastore_id = "local"
+  datastore_id = var.ci_disk_storage
   node_name    = var.target_node
 
-  file_name               = "talos-${local.talos.version}-nocloud-amd64.img"
-  url                     = "https://factory.talos.dev/image/376567988ad370138ad8b2698212367b8edcb69b5fd68c80be1f2ec7d603b4ba/${local.talos.version}/nocloud-amd64.raw.gz"
-  decompression_algorithm = "gz"
+  file_name               = "${var.cluster_name}-talos-${var.talos_version}-nocloud-amd64.img"
+  url                     = var.url == null ? "https://factory.talos.dev/image/${talos_image_factory_schematic.talos_schematic.id}/${var.talos_version}/nocloud-amd64.raw.xz" : var.url
+  decompression_algorithm = var.decompression_algorithm
   overwrite               = false
 }
