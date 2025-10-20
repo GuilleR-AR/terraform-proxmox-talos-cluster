@@ -108,7 +108,7 @@ variable "os_type" {
 variable "tags" {
   type        = string
   description = "Tags to assign to the VMs"
-  default     = "k8s,talos,terraform"
+  default     = "k8s,talos"
 }
 
 variable "starting_ip" {

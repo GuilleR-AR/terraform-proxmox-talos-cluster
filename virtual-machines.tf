@@ -2,7 +2,7 @@ resource "proxmox_virtual_environment_vm" "talos_cp" {
   count       = var.count_cp
   name        = "${var.name}-cp-${count.index}"
   description = var.desc
-  tags        = ["${var.tags},controlplane"]
+  tags        = ["${local.module_tags},${var.tags},controlplane"]
   node_name   = var.target_node
   on_boot     = true
   vm_id       = var.vmid + count.index
@@ -52,7 +52,7 @@ resource "proxmox_virtual_environment_vm" "talos_worker" {
   count       = var.count_worker
   name        = "${var.name}-worker-${count.index}"
   description = var.desc
-  tags        = ["${var.tags},worker"]
+  tags        = ["${local.module_tags},${var.tags},worker"]
   node_name   = var.target_node
   on_boot     = true
   vm_id       = var.vmid + var.count_cp + count.index

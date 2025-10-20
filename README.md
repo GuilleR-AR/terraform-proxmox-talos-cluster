@@ -65,7 +65,7 @@ No modules.
 | <a name="input_count_cp"></a> [count\_cp](#input\_count\_cp) | Number of control plane nodes | `number` | `1` | no |
 | <a name="input_count_worker"></a> [count\_worker](#input\_count\_worker) | Number of worker nodes | `number` | `3` | no |
 | <a name="input_cpu_type"></a> [cpu\_type](#input\_cpu\_type) | CPU type | `string` | `"x86-64-v2-AES"` | no |
-| <a name="input_decompression_algorithm"></a> [decompression\_algorithm](#input\_decompression\_algorithm) | Decompression algorithm for the Talos image (e.g., xz, zst) | `string` | `null` | no |
+| <a name="input_decompression_algorithm"></a> [decompression\_algorithm](#input\_decompression\_algorithm) | Decompression algorithm for the Talos image (e.g., xz, zst) | `string` | `"zst"` | no |
 | <a name="input_desc"></a> [desc](#input\_desc) | Description for the VMs | `string` | `"Managed by Terraform"` | no |
 | <a name="input_disk_interface"></a> [disk\_interface](#input\_disk\_interface) | Disk interface type | `string` | `"virtio0"` | no |
 | <a name="input_disk_size"></a> [disk\_size](#input\_disk\_size) | Size of the SCSI0 disk in GB | `number` | `32` | no |
