@@ -78,7 +78,7 @@ No modules.
 | <a name="input_os_type"></a> [os\_type](#input\_os\_type) | Operating system type for the VMs | `string` | `"l26"` | no |
 | <a name="input_starting_ip"></a> [starting\_ip](#input\_starting\_ip) | Starting IP address for the VMs | `number` | n/a | yes |
 | <a name="input_subnet_cidr"></a> [subnet\_cidr](#input\_subnet\_cidr) | Subnet CIDR for the Talos cluster with gateway as the first IP | `string` | `"192.168.1.1/24"` | no |
-| <a name="input_tags"></a> [tags](#input\_tags) | Tags to assign to the VMs | `string` | `"k8s,talos,terraform"` | no |
+| <a name="input_tags"></a> [tags](#input\_tags) | Tags to assign to the VMs | `string` | `"k8s,talos"` | no |
 | <a name="input_talos_version"></a> [talos\_version](#input\_talos\_version) | Version of Talos to use | `string` | `"v1.11.3"` | no |
 | <a name="input_target_node"></a> [target\_node](#input\_target\_node) | Proxmox VE node name where the VMs will be created | `string` | n/a | yes |
 | <a name="input_timeout"></a> [timeout](#input\_timeout) | QEMU Guest Agent timeout in seconds | `string` | `"5m"` | no |
